@@ -16,7 +16,7 @@ connectDB();
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://the-social-network-olive.vercel.app/'],
+  origin: ['http://localhost:5173', 'https://the-social-network-olive.vercel.app'],
   credentials: true,
 }))
 
