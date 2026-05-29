@@ -1,22 +1,35 @@
+import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
 import FeedCard from '../components/FeedCard';
 import FriendSuggestions from '../components/FriendSuggestions';
 import Stories from '../components/Stories';
 import OnlineFriends from '../components/OnlineFriends';
+import { getFollowingPosts } from '../apicalls/postCalls';
 
-function Home() {
-  // Sample post data
-  const samplePost = {
-    author: { name: "John Doe" },
-    content: "This is a sample post for The Social Network. Welcome to our vintage-styled social media platform!",
-    createdAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-    likes: 15,
-    comments: ["Great!", "Nice post"]
-  };
+function Home({user}) {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const data = await getFollowingPosts();
+        // Sort by recent (newest first)
+        const sortedPosts = data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        setPosts(sortedPosts || []);
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <NavBar />
+      <NavBar name={user.name} />
       <div className="max-w-6xl mx-auto px-3 sm:px-4 md:px-6 pt-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
           {/* Stories section */}
@@ -38,8 +51,15 @@ function Home() {
               </div>
               
               {/* Feed Cards */}
-              <FeedCard post={samplePost} />
-              <FeedCard post={{...samplePost, content: "Another vintage-style post for testing the layout!"}} />
+              {loading ? (
+                <p className="text-center py-8">Loading posts...</p>
+              ) : posts.length > 0 ? (
+                posts.map(post => (
+                  <FeedCard key={post._id} post={post} />
+                ))
+              ) : (
+                <p className="text-center py-8">No posts yet. Follow more people to see their posts!</p>
+              )}
             </div>
           </div>
           

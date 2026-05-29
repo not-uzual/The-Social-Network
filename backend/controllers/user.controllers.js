@@ -20,7 +20,19 @@ export const getAllUsers = async (req, res) => {
   const userId = req.userId;
 
   try {
-    const users = await User.find({ _id: { $ne: userId } }).select("-password");
+    const currentUser = await User.findById(userId).select("following");
+
+    if (!currentUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const followingIds = currentUser.following.map(id => id.toString());
+    const users = await User.find({ 
+      _id: { 
+        $ne: userId,
+        $nin: followingIds
+      } 
+    }).select("-password");
     
     res.status(200).json({ users });
   } catch (error) {

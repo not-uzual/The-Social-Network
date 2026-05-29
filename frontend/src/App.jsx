@@ -13,7 +13,6 @@ import useCurrentUser from "./hooks/useCurrentUser";
 function App() {
   const { loading } = useCurrentUser();
   const { userData } = useSelector((state) => state.user);
-  console.log(userData);
   
   
   if (loading) {
@@ -28,7 +27,7 @@ function App() {
       />
       <Route
         path="/home"
-        element={userData ? <Home /> : <Navigate to="/signin" />}
+        element={userData ? <Home user={userData.user} /> : <Navigate to="/signin" />}
       />
       <Route
         path="/signup"

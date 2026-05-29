@@ -1,21 +1,18 @@
 import User from "../models/user.model.js";
 
 export const addFriend = async (req, res) => {
-  const currentUserId = req.userId; // from isAuth middleware
+  const currentUserId = req.userId;
   const { friendId } = req.body;
 
   try {
-    // Check if friendId is provided
     if (!friendId) {
       return res.status(400).json({ message: "Friend ID is required" });
     }
 
-    // Check if user is trying to add themselves
     if (currentUserId === friendId) {
       return res.status(400).json({ message: "You cannot add yourself as a friend" });
     }
 
-    // Find both users
     const currentUser = await User.findById(currentUserId);
     const friendUser = await User.findById(friendId);
 
@@ -23,18 +20,14 @@ export const addFriend = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Check if already friends
     if (currentUser.following.includes(friendId)) {
       return res.status(400).json({ message: "Already added this friend" });
     }
 
-    // Add friend to current user's following
     currentUser.following.push(friendId);
 
-    // Add current user to friend's followers
     friendUser.followers.push(currentUserId);
 
-    // Save both users
     await currentUser.save();
     await friendUser.save();
 

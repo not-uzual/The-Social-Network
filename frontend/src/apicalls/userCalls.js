@@ -24,7 +24,6 @@ export const getUserProfile = async () => {
 export const getAllUsers = async () => {
   try {
     const response = await api.get("/api/user/all");
-    console.log(response.data);
     
     return response.data;
   } catch (error) {

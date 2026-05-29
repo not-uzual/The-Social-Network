@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const FeedCard = ({ post }) => {
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(post?.likes || 0);
+  const [likeCount, setLikeCount] = useState(post?.likes?.length || 0);
 
   const handleLike = () => {
     if (liked) {
@@ -32,9 +32,9 @@ const FeedCard = ({ post }) => {
     <div className="bg-gray-50 border-2 border-black mb-5 font-mono w-full">
       <div className="flex items-center p-2 sm:p-3 border-b-2 border-black">
         <div className="w-10 h-10 sm:w-12 sm:h-12 border-2 border-black mr-2 sm:mr-3 flex items-center justify-center bg-gray-200 shrink-0">
-          {post?.author?.avatar ? (
+          {post?.author?.profilePic ? (
             <img
-              src={post.author.avatar}
+              src={post.author.profilePic}
               alt="User"
               className="w-full h-full object-cover"
             />
@@ -58,7 +58,7 @@ const FeedCard = ({ post }) => {
       {/* Post Content */}
       <div className="p-3 sm:p-4 border-b border-dashed border-black">
         <p className="text-black mb-3 text-sm sm:text-base leading-relaxed">
-          {post?.content || "This is a sample post content."}
+          {post?.text || "No content"}
         </p>
 
         {/* Post Image */}
