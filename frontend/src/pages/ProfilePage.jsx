@@ -5,8 +5,8 @@ function ProfilePage({userData}) {
   const navigate = useNavigate();
   const user = userData.user;
   
-  const handleLogout = () => {
-    logout()
+  const handleLogout = async () => {
+    await logout()
     navigate('/');
     window.location.reload();
   };
