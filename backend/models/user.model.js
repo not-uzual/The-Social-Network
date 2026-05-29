@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema({
   followers: [],
   following: [],
   posts: [],
-  reels: [],
   story: [],
   
 } , {timestamps: true});

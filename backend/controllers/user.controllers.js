@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 
-export const getCurrentUser = async (req, res) => {
+export const getUserProfile = async (req, res) => {
   const userId = req.userId;
 
   try {
@@ -15,3 +15,17 @@ export const getCurrentUser = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getAllUsers = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const users = await User.find({ _id: { $ne: userId } }).select("-password");
+    
+    res.status(200).json({ users });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
